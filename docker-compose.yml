@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
     container_name: car-care-postgres
+    platform: linux/amd64
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -17,11 +16,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - car-care-network
 
   api:
     build:
       context: ./backend
       dockerfile: CarCareSystem.Api/Dockerfile
+      platform: linux/amd64
     container_name: car-care-api
     environment:
       ASPNETCORE_ENVIRONMENT: Production
@@ -39,6 +41,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      platform: linux/amd64
     container_name: car-care-frontend
     ports:
       - "3000:3000"
